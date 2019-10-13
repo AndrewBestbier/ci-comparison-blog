@@ -1,34 +1,53 @@
 version: 2
 jobs:
-  build:
+  install:
     working_directory: ~/app
     docker:
       - image: circleci/node:latest # (1)
     steps:
       - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install npm dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+  test:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: 'npm run test'
+  build:
+    working_directory: ~/app
+    steps:
+      - checkout
       - setup_remote_docker: # (2)
           docker_layer_caching: true # (3)
-
-      - run:
-          name: Installing deployment dependencies
-          working_directory: /
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get install python-pip python-dev build-essential
-            sudo pip install --upgrade setuptools
-            sudo pip install awsebcli --upgrade
-      # Installing dependencies
-      - run: yarn install
-      # Running tests
-      - run: yarn test
-
-      # Build and push Docker image
       - run: |
           TAG=0.1.$CIRCLE_BUILD_NUM
           docker build -t andrewbestbier/ci-comparison-blog:$TAG .     
           docker login -u $DOCKER_USER -p $DOCKER_PASS         # (4)
           docker push andrewbestbier/ci-comparison-blog:$TAG
-
+  deploy:
+    working_directory: ~/app
+    docker:
+      - image: circleci/python:latest # (1)
+    steps:
+      - checkout
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: 'sudo pip install awsebcli --upgrade'
       - run:
           name: Deploying application to Elastic Beanstalk
           command: eb deploy
