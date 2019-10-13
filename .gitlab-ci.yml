@@ -1,8 +1,12 @@
 image: node:latest
 
+services:
+  - docker:19.03.0-dind
+
 stages:
   - build
   - test
+  - docker-deploy-image
 
 cache:
   paths:
@@ -19,3 +23,10 @@ install_dependencies:
 testing:
   stage: test
   script: npm test
+
+docker-deploy-image:
+  stage: docker-deploy-image
+  script:
+    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+    - docker build -t andrewbestbier/ci-comparison-blog .
+    - docker push andrewbestbier/ci-comparison-blog
