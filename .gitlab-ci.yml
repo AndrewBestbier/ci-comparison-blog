@@ -23,7 +23,7 @@ testing:
 
 docker-deploy-image:
   stage: docker-deploy-image
-  image: gitlab/dind
+  image: docker:dind
   services:
     - docker:dind
   script:
