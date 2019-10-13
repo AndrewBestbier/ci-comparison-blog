@@ -11,7 +11,7 @@ jobs:
         - npm test
     - stage: docker-deploy-image
       script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
         - docker build -t andrewbestbier/ci-comparison-blog:$TRAVIS_TAG .
         - docker push andrewbestbier/ci-comparison-blog:$TRAVIS_TAG
     - stage: deploy
