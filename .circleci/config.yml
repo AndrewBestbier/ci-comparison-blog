@@ -2,18 +2,25 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:latest # (1)
     working_directory: ~/repo
     steps:
       - checkout
-      - setup_remote_docker #https://circleci.com/docs/2.0/building-docker-images/
-
+      - setup_remote_docker: # (2)
+          docker_layer_caching: true # (3)
       - run:
           name: Install AWS CLI
           command: |
             sudo apt-get update
             sudo apt-get install -y awscli
-
+      # Installing dependencies
       - run: yarn install
-
+      # Running tests
       - run: yarn test
+
+      # Build and push Docker image
+      - run: |
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          docker build -t andrewbestbier/ci-comparison-blog:$TAG .     
+          docker login -u $DOCKER_USER -p $DOCKER_PASS         # (4)
+          docker push andrewbestbier/ci-comparison-blog:$TAG
