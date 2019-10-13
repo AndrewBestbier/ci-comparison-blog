@@ -23,8 +23,9 @@ testing:
 
 docker-deploy-image:
   stage: docker-deploy-image
+  image: gitlab/dind
   services:
-    - docker:19
+    - docker:dind
   script:
     - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
     - docker build -t andrewbestbier/ci-comparison-blog .
