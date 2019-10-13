@@ -1,8 +1,5 @@
 image: node:latest
 
-services:
-  - docker:19
-
 stages:
   - build
   - test
@@ -26,6 +23,8 @@ testing:
 
 docker-deploy-image:
   stage: docker-deploy-image
+  services:
+    - docker:19
   script:
     - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
     - docker build -t andrewbestbier/ci-comparison-blog .
