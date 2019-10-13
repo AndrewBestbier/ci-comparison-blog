@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: circleci/node:latest # (1)
     steps:
+      - checkout
       - setup_remote_docker: # (2)
           docker_layer_caching: true # (3)
 
