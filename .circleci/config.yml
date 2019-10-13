@@ -1,9 +1,9 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/app
     docker:
       - image: circleci/node:latest # (1)
-    working_directory: ~/repo
     steps:
       - checkout
       - setup_remote_docker: # (2)
