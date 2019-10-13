@@ -24,3 +24,7 @@ jobs:
           docker build -t andrewbestbier/ci-comparison-blog:$TAG .     
           docker login -u $DOCKER_USER -p $DOCKER_PASS         # (4)
           docker push andrewbestbier/ci-comparison-blog:$TAG
+
+      - run:
+          name: Deploying application to Elastic Beanstalk
+          command: eb deploy
