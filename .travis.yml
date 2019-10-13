@@ -1,8 +1,25 @@
 language: node_js
 node_js:
   - 'node'
+services:
+  - docker
 jobs:
   include:
     - stage: test
+      script: 
+        - npm install
+        - npm test
+    - stage: docker-deploy-image
       script: npm install
       script: npm run test
+    - stage: deploy
+      script: skip
+      deploy:
+        provider: elasticbeanstalk
+        access_key_id:
+          secure: "Encrypted <access-key-id>="
+        secret_access_key:
+          secure: "Encypted <secret-access-key>="
+        region: "eu-west-2"
+        app: "CI Comparison Blog"
+        env: "CiComparisonBlog-env"
