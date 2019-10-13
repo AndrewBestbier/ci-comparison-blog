@@ -6,20 +6,22 @@ services:
 jobs:
   include:
     - stage: test
-      script: 
+      script:
         - npm install
         - npm test
     - stage: docker-deploy-image
-      script: npm install
-      script: npm run test
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t andrewbestbier/ci-comparison-blog:$TRAVIS_TAG .
+        - docker push andrewbestbier/ci-comparison-blog:$TRAVIS_TAG
     - stage: deploy
       script: skip
       deploy:
         provider: elasticbeanstalk
-        access_key_id:
-          secure: "Encrypted <access-key-id>="
-        secret_access_key:
-          secure: "Encypted <secret-access-key>="
-        region: "eu-west-2"
-        app: "CI Comparison Blog"
-        env: "CiComparisonBlog-env"
+        access_key_id: $AWS_ACCESS_KEY_ID
+        secret_access_key: $AWS_SECRET_ACCESS_KEY
+        region: 'eu-west-2'
+        app: 'CI Comparison Blog'
+        env: 'CiComparisonBlog-env'
+        bucket: 'elasticbeanstalk-eu-west-2-094505317841'
+        bucket_path: 'CI Comparison Blog'
