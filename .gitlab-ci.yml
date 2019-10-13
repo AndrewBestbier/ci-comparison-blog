@@ -36,6 +36,6 @@ aws-deploy:
   image: 'python:latest'
   stage: aws-deploy
   before_script:
-    - 'sudo pip install awsebcli --upgrade'
+    - 'pip install awsebcli --upgrade'
   script:
     - eb-deploy
