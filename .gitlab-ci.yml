@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - docker-deploy-image
+  - aws-deploy
 
 cache:
   paths:
@@ -30,3 +31,11 @@ docker-deploy-image:
     - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
     - docker build -t andrewbestbier/ci-comparison-blog .
     - docker push andrewbestbier/ci-comparison-blog
+
+aws-deploy:
+  image: 'python:latest'
+  stage: aws-deploy
+  before_script:
+    - 'sudo pip install awsebcli --upgrade'
+  script:
+    - eb-deploy
