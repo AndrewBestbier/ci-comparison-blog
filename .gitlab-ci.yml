@@ -28,7 +28,7 @@ docker-deploy-image:
   services:
     - docker:dind
   script:
-    - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin # (5)
+    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin # (5)
     - docker build -t andrewbestbier/ci-comparison-blog .
     - docker push andrewbestbier/ci-comparison-blog
 
