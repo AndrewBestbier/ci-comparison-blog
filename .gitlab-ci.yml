@@ -1,4 +1,4 @@
-image: node:latest
+image: node:latest # (1)
 
 stages:
   - build
@@ -8,19 +8,19 @@ stages:
 
 cache:
   paths:
-    - node_modules/
+    - node_modules/ # (2)
 
 install_dependencies:
   stage: build
   script:
-    - npm install
+    - npm install # (3)
   artifacts:
     paths:
       - node_modules/
 
 testing:
   stage: test
-  script: npm test
+  script: npm test # (4)
 
 docker-deploy-image:
   stage: docker-deploy-image
@@ -28,7 +28,7 @@ docker-deploy-image:
   services:
     - docker:dind
   script:
-    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin # (5)
     - docker build -t andrewbestbier/ci-comparison-blog .
     - docker push andrewbestbier/ci-comparison-blog
 
@@ -36,6 +36,6 @@ aws-deploy:
   image: 'python:latest'
   stage: aws-deploy
   before_script:
-    - 'pip install awsebcli --upgrade'
+    - 'pip install awsebcli --upgrade' # (6)
   script:
     - eb deploy CiComparisonBlog-env
