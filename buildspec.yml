@@ -15,7 +15,7 @@ phases:
       - npm test
   build:
     commands:
-      - docker build -t andrewbestbier/ci-comparison-blog .
+      - docker build -t sheriffexcel/expressApp .
   post_build:
     commands:
-      - docker push andrewbestbier/ci-comparison-blog
+      - docker push sheriffexcel/expressApp
