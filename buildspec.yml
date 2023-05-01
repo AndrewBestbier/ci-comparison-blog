@@ -15,7 +15,7 @@ phases:
       - npm test
   build:
     commands:
-      - docker build -t sheriffexcel/expressApp .
+      - docker build -t sheriffexcel/expressapp .
   post_build:
     commands:
-      - docker push sheriffexcel/expressApp
+      - docker push sheriffexcel/expressapp
