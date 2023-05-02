@@ -19,6 +19,7 @@ phases:
   post_build:
     commands:
       - docker push sheriffexcel/expressapp
-  artifacts:
+
+artifacts:
     files:
       - '**/*'
