@@ -5,7 +5,7 @@ resource "aws_codebuild_project" "ci_comparism" {
   service_role  = aws_iam_role.this.arn
 
   artifacts {
-    type = "NO_ARTIFACTS"
+    type = "CODEPIPELINE"
   }
 
   environment {
@@ -45,9 +45,7 @@ resource "aws_codebuild_project" "ci_comparism" {
   }
 
   source {
-    type                = "GITHUB"
-    location            = "https://github.com/realexcel2021/ci-comparison-blog"
-    git_clone_depth     = 1
+    type                = "CODEPIPELINE"
     report_build_status = true
     buildspec           = file("../buildspec.yml")
     git_submodules_config {
