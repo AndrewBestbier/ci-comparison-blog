@@ -29,23 +29,23 @@ resource "aws_iam_instance_profile" "beanstalk_iam_instance_profile" {
 }
 
 resource "aws_elastic_beanstalk_application" "express_app" {
-    name = "expressjs_app"
-    description = "Express JS application deployed on elastic beanstalk"
+  name        = "expressjs_app"
+  description = "Express JS application deployed on elastic beanstalk"
 }
 
 resource "aws_elastic_beanstalk_environment" "express_app-env" {
-    name = "expressjs-app-env"
-    application = aws_elastic_beanstalk_application.express_app.name
-    cname_prefix = "express-app-sheriff"
-    solution_stack_name = "64bit Amazon Linux 2 v3.5.7 running Docker"
+  name                = "expressjs-app-env"
+  application         = aws_elastic_beanstalk_application.express_app.name
+  cname_prefix        = "express-app-ci-comparism"
+  solution_stack_name = "64bit Amazon Linux 2 v3.5.7 running Docker"
 
-    setting {
-      namespace = "aws:ec2:vpc"
-      name = "VPCId"
-      value = aws_vpc.elb_vpc.id
-    }
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "VPCId"
+    value     = aws_vpc.elb_vpc.id
+  }
 
-    setting {
+  setting {
     namespace = "aws:ec2:vpc"
     name      = "Subnets"
     value     = aws_subnet.elb_subnet.id
