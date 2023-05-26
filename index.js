@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => res.send('Hello World! from Sheriff. The Pipeline works!'));
+app.get('/', (req, res) => res.send('Hello World! from Sheriff. The Pipeline works! Trying pipeline from Github'));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
