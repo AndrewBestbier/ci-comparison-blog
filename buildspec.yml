@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      nodejs: 18
     commands:
       - npm i npm@latest -g
       - pip install --upgrade pip
@@ -15,7 +15,11 @@ phases:
       - npm test
   build:
     commands:
-      - docker build -t andrewbestbier/ci-comparison-blog .
+      - docker build -t sheriffexcel/expressapp .
   post_build:
     commands:
-      - docker push andrewbestbier/ci-comparison-blog
+      - docker push sheriffexcel/expressapp
+
+artifacts:
+    files:
+      - '**/*'
