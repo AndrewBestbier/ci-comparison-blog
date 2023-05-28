@@ -15,5 +15,6 @@ resource "aws_s3_bucket_object" "my_app_deployment" {
 
 
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "codepipeline-bucket-ci-comparism"
+  bucket        = "codepipeline-bucket-ci-comparism"
+  force_destroy = true
 }

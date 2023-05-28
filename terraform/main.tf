@@ -44,6 +44,19 @@ resource "aws_route_table_association" "route_table_accociation" {
   route_table_id = aws_route_table.jenkins_route_table.id
 }
 
+resource "aws_security_group" "allow_all" {
+  name   = "Codebuild-sg"
+  vpc_id = aws_vpc.elb_vpc.id
+
+  ingress {
+    description = "Allow all traffic"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 
 # codebuild role
 
@@ -68,11 +81,18 @@ EOF
 
 data "aws_iam_policy_document" "this" {
   statement {
-    sid       = ""
-    actions   = ["logs:*", "s3:*", "codebuild:*", "secretsmanager:*", "iam:*"]
+    sid = ""
+    actions = [
+      "logs:*",
+      "s3:*",
+      "codebuild:*",
+      "secretsmanager:*",
+      "iam:*",
+    ]
     resources = ["*"]
     effect    = "Allow"
   }
+
 }
 
 resource "aws_iam_policy" "this" {

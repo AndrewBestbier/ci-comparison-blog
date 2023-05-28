@@ -6,3 +6,7 @@ variable "DOCKER_USER" {
 variable "DOCKER_PASS" {
   description = "Password for docker hub"
 }
+
+variable "Github_Repo" {
+    description = "Enter the repo directory to the forked repo <username>/ci-comparison-blog"
+}

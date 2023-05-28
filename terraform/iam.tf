@@ -7,7 +7,10 @@ data "aws_iam_policy_document" "assume_role" {
       identifiers = ["codepipeline.amazonaws.com"]
     }
 
-    actions = ["sts:AssumeRole"]
+    actions = [
+      "sts:AssumeRole",
+
+    ]
   }
 }
 
@@ -35,6 +38,13 @@ data "aws_iam_policy_document" "codepipeline_policy" {
   }
 
   statement {
+    sid       = "AllowEBPermissions"
+    actions   = ["elasticbeanstalk:*"]
+    resources = ["*"]
+
+  }
+
+  statement {
     effect    = "Allow"
     actions   = ["codestar-connections:UseConnection"]
     resources = [aws_codestarconnections_connection.github_codepipeline.arn]
@@ -56,4 +66,10 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   name   = "codepipeline_policy"
   role   = aws_iam_role.codepipeline_role.id
   policy = data.aws_iam_policy_document.codepipeline_policy.json
+}
+
+resource "aws_iam_role_policy" "codepipeline_policy_file" {
+  policy = file("codepipelinepolicy.json")
+  name   = "Elasticbeanstalk_Deployment_Policy"
+  role   = aws_iam_role.codepipeline_role.id
 }

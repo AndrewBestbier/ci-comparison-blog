@@ -10,23 +10,21 @@ resource "aws_codebuild_project" "ci_comparism" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:2.0"
+    image                       = "aws/codebuild/standard:7.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
-    # registry_credential {
-    #   credential          = var.dockerhub_credentials
-    #   credential_provider = var.credential_provider
-    # }
 
     environment_variable {
       name  = "DOCKER_USER"
       value = var.DOCKER_USER
+
     }
 
     environment_variable {
       name  = "DOCKER_PASS"
       value = var.DOCKER_PASS
+
     }
   }
 
@@ -38,10 +36,6 @@ resource "aws_codebuild_project" "ci_comparism" {
       stream_name = "log-stream"
     }
 
-    # s3_logs {
-    #   status   = var.s3_logs_status
-    #   location = "${var.s3_bucket_id}/build-log"
-    # }
   }
 
   source {
@@ -58,9 +52,9 @@ resource "aws_codebuild_project" "ci_comparism" {
   # If you are using private subnets for CodeBuild then only use VPC configureation. In that case VPC must have NAT gateway.
   # If you are simply using all public network then DONT'T use VPC config.  
   # vpc_config {
-  #   vpc_id             = var.vpc_id
-  #   subnets            = var.subnets
-  #   security_group_ids = var.security_group_ids
+  #   vpc_id  = aws_vpc.elb_vpc.id
+  #   subnets = [aws_subnet.elb_subnet.id]
+  #   security_group_ids = [aws_security_group.allow_all.id]
   # }
 
 }

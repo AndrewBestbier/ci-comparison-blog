@@ -7,6 +7,7 @@ resource "aws_codepipeline" "codepipeline" {
     type     = "S3"
   }
 
+
   stage {
     name = "Source"
     action {
@@ -19,7 +20,7 @@ resource "aws_codepipeline" "codepipeline" {
 
       configuration = {
         ConnectionArn    = aws_codestarconnections_connection.github_codepipeline.arn
-        FullRepositoryId = "realexcel2021/ci-comparison-blog"
+        FullRepositoryId = var.Github_Repo
         BranchName       = "master"
       }
     }
@@ -58,6 +59,8 @@ resource "aws_codepipeline" "codepipeline" {
       }
     }
   }
+
+
 
 }
 

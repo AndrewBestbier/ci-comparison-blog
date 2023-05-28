@@ -28,6 +28,24 @@ resource "aws_iam_instance_profile" "beanstalk_iam_instance_profile" {
   role = aws_iam_role.beanstalk_service.name
 }
 
+
+data "aws_iam_policy_document" "elastic_beanstalk_enviroment_doc" {
+
+  statement {
+    sid       = "AllowEBPermissions"
+    actions   = ["elasticbeanstalk:*"]
+    resources = ["*"]
+  }
+
+}
+
+resource "aws_iam_role_policy" "elastic_beanstalk_enviroment_policy" {
+  name   = "elasticbeanstalk_enviroment_policy"
+  role   = aws_iam_role.beanstalk_service.id
+  policy = data.aws_iam_policy_document.elastic_beanstalk_enviroment_doc.json
+}
+
+
 resource "aws_elastic_beanstalk_application" "express_app" {
   name        = "expressjs_app"
   description = "Express JS application deployed on elastic beanstalk"
@@ -60,6 +78,12 @@ resource "aws_elastic_beanstalk_environment" "express_app-env" {
     namespace = "aws:elasticbeanstalk:cloudwatch:logs"
     name      = "StreamLogs"
     value     = "True"
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "ServiceRole"
+    value     = aws_iam_role.beanstalk_service.arn
   }
 
 }
