@@ -1,4 +1,4 @@
-# Use an official Node runtime as a parent image
+# Use an official Node runtime as a parent image, Please note i have added some files for practice and we can continue
 FROM node:12.7.0-alpine
 
 # Set the working directory to /app
